@@ -9,11 +9,9 @@
 
     html.className = html.className.replace(/\bno-js\b/g, '') + ' js ';
 
-
-
-   /* Animations
-    * -------------------------------------------------- */
-    const tl = anime.timeline( {
+    /* Animations
+     * -------------------------------------------------- */
+    const tl = anime.timeline({
         easing: 'easeInOutCubic',
         duration: 800,
         autoplay: false
@@ -40,7 +38,7 @@
         opacity: [0, 1]
     }, '-=200')
     .add({
-        targets: [ '.s-intro .text-pretitle', '.s-intro .text-huge-title'],
+        targets: ['.s-intro .text-pretitle', '.s-intro .text-huge-title'],
         translateX: [100, 0],
         opacity: [0, 1],
         delay: anime.stagger(400)
@@ -48,16 +46,16 @@
     .add({
         targets: '.circles span',
         keyframes: [
-            {opacity: [0, .3]},
-            {opacity: [.3, .1], delay: anime.stagger(100, {direction: 'reverse'})}
+            { opacity: [0, .3] },
+            { opacity: [.3, .1], delay: anime.stagger(100, { direction: 'reverse' }) }
         ],
-        delay: anime.stagger(100, {direction: 'reverse'})
+        delay: anime.stagger(100, { direction: 'reverse' })
     })
     .add({
         targets: '.intro-social li',
         translateX: [-50, 0],
         opacity: [0, 1],
-        delay: anime.stagger(100, {direction: 'reverse'})
+        delay: anime.stagger(100, { direction: 'reverse' })
     })
     .add({
         targets: '.intro-scrolldown',
@@ -66,11 +64,9 @@
     }, '-=800');
 
 
-
-   /* Preloader
-    * -------------------------------------------------- */
+    /* Preloader
+     * -------------------------------------------------- */
     const ssPreloader = function() {
-
         const preloader = document.querySelector('#preloader');
         if (!preloader) return;
         
@@ -78,25 +74,18 @@
             document.querySelector('html').classList.remove('ss-preload');
             document.querySelector('html').classList.add('ss-loaded');
 
-            document.querySelectorAll('.ss-animated').forEach(function(item){
+            document.querySelectorAll('.ss-animated').forEach(function(item) {
                 item.classList.remove('ss-animated');
             });
 
             tl.play();
         });
-
-        // force page scroll position to top at page refresh
-        // window.addEventListener('beforeunload' , function () {
-        //     // window.scrollTo(0, 0);
-        // });
-
-    }; // end ssPreloader
+    };
 
 
-   /* Mobile Menu
-    * ---------------------------------------------------- */ 
+    /* Mobile Menu
+     * ---------------------------------------------------- */
     const ssMobileMenu = function() {
-
         const toggleButton = document.querySelector('.mobile-menu-toggle');
         const mainNavWrap = document.querySelector('.main-nav-wrap');
         const siteBody = document.querySelector("body");
@@ -111,8 +100,6 @@
 
         mainNavWrap.querySelectorAll('.main-nav a').forEach(function(link) {
             link.addEventListener("click", function(event) {
-
-                // at 800px and below
                 if (window.matchMedia('(max-width: 800px)').matches) {
                     toggleButton.classList.toggle('is-clicked');
                     siteBody.classList.toggle('menu-is-open');
@@ -121,44 +108,27 @@
         });
 
         window.addEventListener('resize', function() {
-
-            // above 800px
             if (window.matchMedia('(min-width: 801px)').matches) {
                 if (siteBody.classList.contains('menu-is-open')) siteBody.classList.remove('menu-is-open');
                 if (toggleButton.classList.contains("is-clicked")) toggleButton.classList.remove("is-clicked");
             }
         });
+    };
 
-    }; // end ssMobileMenu
 
-
-   /* Highlight active menu link on pagescroll
-    * ------------------------------------------------------ */
+    /* Highlight active menu link on pagescroll
+     * ------------------------------------------------------ */
     const ssScrollSpy = function() {
-
         const sections = document.querySelectorAll(".target-section");
-
-        // Add an event listener listening for scroll
         window.addEventListener("scroll", navHighlight);
 
         function navHighlight() {
-        
-            // Get current scroll position
             let scrollY = window.pageYOffset;
-        
-            // Loop through sections to get height(including padding and border), 
-            // top and ID values for each
             sections.forEach(function(current) {
                 const sectionHeight = current.offsetHeight;
                 const sectionTop = current.offsetTop - 50;
                 const sectionId = current.getAttribute("id");
             
-               /* If our current scroll position enters the space where current section 
-                * on screen is, add .current class to parent element(li) of the thecorresponding 
-                * navigation link, else remove it. To know which link is active, we use 
-                * sectionId variable we are getting while looping through sections as 
-                * an selector
-                */
                 if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
                     document.querySelector(".main-nav a[href*=" + sectionId + "]").parentNode.classList.add("current");
                 } else {
@@ -166,24 +136,18 @@
                 }
             });
         }
+    };
 
-    }; // end ssScrollSpy
 
-
-   /* Animate elements if in viewport
-    * ------------------------------------------------------ */
+    /* Animate elements if in viewport
+     * ------------------------------------------------------ */
     const ssViewAnimate = function() {
-
         const blocks = document.querySelectorAll("[data-animate-block]");
-
         window.addEventListener("scroll", viewportAnimation);
 
         function viewportAnimation() {
-
             let scrollY = window.pageYOffset;
-
             blocks.forEach(function(current) {
-
                 const viewportHeight = window.innerHeight;
                 const triggerTop = (current.offsetTop + (viewportHeight * .2)) - viewportHeight;
                 const blockHeight = current.offsetHeight;
@@ -196,7 +160,7 @@
                         targets: current.querySelectorAll("[data-animate-el]"),
                         opacity: [0, 1],
                         translateY: [100, 0],
-                        delay: anime.stagger(400, {start: 200}),
+                        delay: anime.stagger(400, { start: 200 }),
                         duration: 800,
                         easing: 'easeInOutCubic',
                         begin: function(anim) {
@@ -206,198 +170,193 @@
                 }
             });
         }
+    };
 
-    }; // end ssViewAnimate
 
-
-   /* Swiper
-    * ------------------------------------------------------ */ 
+    /* Swiper
+     * ------------------------------------------------------ */
     const ssSwiper = function() {
-
-        const mySwiper = new Swiper('.swiper-container', {
-
+        const testimonialSwiper = new Swiper('.testimonial-slider', {
             slidesPerView: 1,
             pagination: {
                 el: '.swiper-pagination',
                 clickable: true,
             },
             breakpoints: {
-                // when window width is > 400px
-                401: {
-                    slidesPerView: 1,
-                    spaceBetween: 20
-                },
-                // when window width is > 800px
-                801: {
-                    slidesPerView: 2,
-                    spaceBetween: 32
-                },
-                // when window width is > 1200px
-                1201: {
-                    slidesPerView: 2,
-                    spaceBetween: 80
-                }
+                401: { slidesPerView: 1, spaceBetween: 20 },
+                801: { slidesPerView: 2, spaceBetween: 32 },
+                1201: { slidesPerView: 2, spaceBetween: 80 }
             }
-         });
+        });
+    };
 
-    }; // end ssSwiper
 
-
-   /* Lightbox
-    * ------------------------------------------------------ */
+    /* Lightbox
+     * ------------------------------------------------------ */
     const ssLightbox = function() {
-
         const folioLinks = document.querySelectorAll('.folio-list__item-link');
         const modals = [];
 
         folioLinks.forEach(function(link) {
             let modalbox = link.getAttribute('href');
-            let instance = basicLightbox.create(
-                document.querySelector(modalbox),
-                {
+            let modalContent = document.querySelector(modalbox);
+
+            if (modalContent) {
+                let instance = basicLightbox.create(modalContent, {
                     onShow: function(instance) {
-                        //detect Escape key press
                         document.addEventListener("keydown", function(event) {
-                            event = event || window.event;
-                            if (event.keyCode === 27) {
+                            if (event.key === "Escape") {
                                 instance.close();
                             }
                         });
                     }
-                }
-            )
-            modals.push(instance);
+                });
+                modals.push({ link: link, instance: instance });
+            }
         });
 
-        folioLinks.forEach(function(link, index) {
-            link.addEventListener("click", function(event) {
+        modals.forEach(function(modal) {
+            modal.link.addEventListener("click", function(event) {
                 event.preventDefault();
-                modals[index].show();
+                modal.instance.show();
             });
         });
+    };
 
-    };  // end ssLightbox
 
-
-   /* Alert boxes
-    * ------------------------------------------------------ */
+    /* Alert boxes
+     * ------------------------------------------------------ */
     const ssAlertBoxes = function() {
-
         const boxes = document.querySelectorAll('.alert-box');
-  
-        boxes.forEach(function(box){
-
+        boxes.forEach(function(box) {
             box.addEventListener('click', function(event) {
                 if (event.target.matches(".alert-box__close")) {
                     event.stopPropagation();
                     event.target.parentElement.classList.add("hideit");
-
-                    setTimeout(function(){
+                    setTimeout(function() {
                         box.style.display = "none";
-                    }, 500)
-                }    
+                    }, 500);
+                }
             });
+        });
+    };
 
-        })
-
-    }; // end ssAlertBoxes
-
-
-   /* Smoothscroll
-    * ------------------------------------------------------ */
-    const ssMoveTo = function(){
-
+    /* Smoothscroll
+     * ------------------------------------------------------ */
+    const ssMoveTo = function() {
         const easeFunctions = {
-            easeInQuad: function (t, b, c, d) {
-                t /= d;
-                return c * t * t + b;
-            },
-            easeOutQuad: function (t, b, c, d) {
-                t /= d;
-                return -c * t* (t - 2) + b;
-            },
-            easeInOutQuad: function (t, b, c, d) {
-                t /= d/2;
-                if (t < 1) return c/2*t*t + b;
-                t--;
-                return -c/2 * (t*(t-2) - 1) + b;
-            },
-            easeInOutCubic: function (t, b, c, d) {
-                t /= d/2;
-                if (t < 1) return c/2*t*t*t + b;
+            easeInOutCubic: function(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t * t + b;
                 t -= 2;
-                return c/2*(t*t*t + 2) + b;
+                return c / 2 * (t * t * t + 2) + b;
             }
-        }
-
+        };
         const triggers = document.querySelectorAll('.smoothscroll');
-        
         const moveTo = new MoveTo({
             tolerance: 0,
             duration: 1200,
             easing: 'easeInOutCubic',
             container: window
         }, easeFunctions);
-
         triggers.forEach(function(trigger) {
             moveTo.registerTrigger(trigger);
         });
+    };
 
-    }; // end ssMoveTo
+
+    /* Lazy Load Gallery
+     * ------------------------------------------------------ */
+    const ssLazyLoadGallery = function() {
+        const loadGalleryBtn = document.getElementById('load-gallery-btn');
+        const galleryContainer = document.getElementById('gallery-content-container');
+
+        if (!loadGalleryBtn || !galleryContainer) return;
+
+        loadGalleryBtn.addEventListener('click', function() {
+            const button = this;
+            button.textContent = 'লোড হচ্ছে...';
+            button.disabled = true;
+
+            fetch('gallery-content.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    galleryContainer.innerHTML = html;
+                    // বাটনটি কন্টেইনারের ভিতরে থাকায়, innerHTML পরিবর্তন করার পর বাটনটি চলে যাবে।
+                    
+                    // এখন Swiper এবং Lightbox চালু করুন কারণ গ্যালারির HTML এখন পেজে লোড হয়েছে
+                    ssSwiper(); // testimonial slider-এর জন্য
+                    ssLightbox();
+
+                    // নতুন লোড হওয়া কনটেন্টের জন্য অ্যানিমেশন আবার চালু করুন
+                    const newAnimatedElements = galleryContainer.querySelectorAll("[data-animate-el]");
+                    anime({
+                        targets: newAnimatedElements,
+                        opacity: [0, 1],
+                        translateY: [100, 0],
+                        delay: anime.stagger(100),
+                        duration: 800,
+                        easing: 'easeInOutCubic'
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading gallery:', error);
+                    galleryContainer.innerHTML = '<p style="color: white; text-align: center;">দুঃখিত, গ্যালারি লোড করা সম্ভব হয়নি।</p>';
+                });
+        });
+    };
 
 
-   /* Initialize
-    * ------------------------------------------------------ */
+    /* Initialize
+     * ------------------------------------------------------ */
     (function ssInit() {
-
         ssPreloader();
         ssMobileMenu();
         ssScrollSpy();
         ssViewAnimate();
-        ssSwiper();
-        ssLightbox();
+        ssSwiper(); // Testimonial slider-এর জন্য এটি পেজ লোডেই চালু থাকবে
         ssAlertBoxes();
         ssMoveTo();
 
+        // শুধুমাত্র গ্যালারি লোড করার জন্য event listener সেট আপ করুন
+        ssLazyLoadGallery();
     })();
 
 })(document.documentElement);
-    
-    
-<!-- contact copied-->
 
-        function copyText() {
-            // Get the text element containing the email address
-            const textElement = document.getElementById("ContactAddress");
 
-            // Create a new temporary input element
-            const tempInput = document.createElement("input");
-            tempInput.value = textElement.textContent;
+/* contact copied
+ * ------------------------------------------------------ */
+function copyText(element) {
+    const textToCopy = element.textContent;
 
-            // Append the temporary input element to the document body (hidden)
-            document.body.appendChild(tempInput);
-
-            // Select the temporary input element
-            tempInput.select();
-
-            try {
-                // Attempt to copy the selected text
-                const successful = navigator.clipboard.writeText(tempInput.value);
-
-                // Display success message if copying is successful
-                if (successful) {
-                    alert(`The UID "${textElement.textContent}" is copied successfully!`);
-                } else {
-                    alert("Unable to copy text. Please try again.");
-                }
-            } catch (err) {
-                // Handle potential errors during copying
-                console.error("Failed to copy text:", err);
-                alert("Unable to copy text. Please try again.");
-            }
-
-            // Remove the temporary input element after copying
-            document.body.removeChild(tempInput);
+    // আধুনিক ব্রাউজারের জন্য navigator.clipboard ব্যবহার করা ভালো
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(textToCopy).then(function() {
+            alert(`UID "${textToCopy}" সফলভাবে কপি করা হয়েছে!`);
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+            alert("দুঃখিত, কপি করা সম্ভব হয়নি।");
+        });
+    } else {
+        // পুরোনো ব্রাউজারের জন্য ফলব্যাক
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            alert(`UID "${textToCopy}" সফলভাবে কপি করা হয়েছে!`);
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+            alert("দুঃখিত, কপি করা সম্ভব হয়নি।");
         }
-        
-/* contact copied end */
+        document.body.removeChild(textArea);
+    }
+}
